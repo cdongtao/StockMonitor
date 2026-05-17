@@ -17,3 +17,18 @@ dist/
 
 # Logs
 *.log
+
+# Skills (npx skills)
+.agents/
+.claude/skills/
+
+# Claude local config
+.claude/*.local.md
+.claude/*.local.json
+.claude/settings.local.json
+
+# Skills lock (auto-generated)
+skills-lock.json
+
+# Claude worktrees
+.claude/worktrees/
