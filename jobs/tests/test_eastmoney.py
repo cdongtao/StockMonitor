@@ -53,3 +53,33 @@ async def test_fetch_page_failure_returns_empty():
             filter_str="(X=1)",
         )
     assert result == []
+
+
+from data_sources.eastmoney import EastMoneyClient
+from datetime import date
+
+
+@pytest.mark.asyncio
+async def test_fetch_market_stats_returns_list():
+    """fetch_market_stats 返回 list[dict]，每条包含 TRADE_DATE"""
+    mock_data = [
+        {
+            "TRADE_DATE": "2025-12-26 00:00:00",
+            "LIMIT_NUMBERS": 81,
+            "NATURAL_LIMIT": 60,
+            "DAILY_LIMIT": 21,
+            "TOUCH_LIMIT": 120,
+            "SEALING_RATE": 0.72,
+            "LIMIT_DOWN_NUM": 5,
+            "MONEYMAKING_EFFECT": 3,
+            "POSITION_SUGGESTION": 2,
+            "DT_FBL": 0.1,
+        }
+    ]
+    client = EastMoneyClient()
+    with patch.object(client, "fetch_all_pages", new_callable=AsyncMock) as mock_fetch:
+        mock_fetch.return_value = mock_data
+        result = await client.fetch_market_stats(date(2025, 12, 26))
+    assert len(result) == 1
+    assert result[0]["TRADE_DATE"] == "2025-12-26 00:00:00"
+    mock_fetch.assert_called_once()
