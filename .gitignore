@@ -27,8 +27,5 @@ dist/
 .claude/*.local.json
 .claude/settings.local.json
 
-# Skills lock (auto-generated)
-skills-lock.json
-
 # Claude worktrees
 .claude/worktrees/

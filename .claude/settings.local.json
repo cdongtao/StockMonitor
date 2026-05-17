@@ -4,5 +4,6 @@
       "Bash(cp /Users/arthurchen/StockMonitor/CLAUDE.md /Users/arthurchen/StockMonitor/frameworkDesign.md)",
       "Bash(rm /Users/arthurchen/StockMonitor/CLAUDE.md)"
     ]
-  }
+  },
+  "enabledPlugins": {}
 }
