@@ -16,6 +16,4 @@ class Settings(BaseSettings):
     )
 
 
-def get_settings() -> Settings:
-    """Lazily load settings from environment"""
-    return Settings()
+settings = Settings()
