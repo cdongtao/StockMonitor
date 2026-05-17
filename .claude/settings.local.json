@@ -2,7 +2,15 @@
   "permissions": {
     "allow": [
       "Bash(cp /Users/arthurchen/StockMonitor/CLAUDE.md /Users/arthurchen/StockMonitor/frameworkDesign.md)",
-      "Bash(rm /Users/arthurchen/StockMonitor/CLAUDE.md)"
+      "Bash(rm /Users/arthurchen/StockMonitor/CLAUDE.md)",
+      "WebFetch(domain:datacenter.eastmoney.com)",
+      "Skill(superpowers:subagent-driven-development)",
+      "Bash(python3 -m venv .venv)",
+      "Bash(git *)",
+      "Bash(psql -U postgres -c \"SELECT 1;\")",
+      "Bash(psql -U arthurchen -c \"SELECT 1;\")",
+      "Bash(pg_isready)",
+      "Bash(brew list *)"
     ]
   },
   "enabledPlugins": {}
