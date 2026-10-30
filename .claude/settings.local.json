@@ -10,7 +10,21 @@
       "Bash(psql -U postgres -c \"SELECT 1;\")",
       "Bash(psql -U arthurchen -c \"SELECT 1;\")",
       "Bash(pg_isready)",
-      "Bash(brew list *)"
+      "Bash(brew list *)",
+      "Bash(.venv/bin/python *)",
+      "Bash(.venv/bin/pytest *)",
+      "WebSearch",
+      "Read(//Users/arthurchen/**)",
+      "Bash(plutil -convert json -o - -)",
+      "Bash(sqlite3 /Users/arthurchen/.cc-switch/cc-switch.db \".tables\")",
+      "Bash(sqlite3 /Users/arthurchen/.cc-switch/cc-switch.db \"SELECT * FROM providers;\")",
+      "Bash(sqlite3 /Users/arthurchen/.cc-switch/cc-switch.db \"SELECT key, value FROM settings WHERE key LIKE '%active%' OR key LIKE '%current%' OR key LIKE '%selected%';\")",
+      "Bash(sqlite3 /Users/arthurchen/.cc-switch/cc-switch.db \".schema settings\")",
+      "Bash(sqlite3 *)",
+      "Bash(curl -s http://127.0.0.1:15721/health)",
+      "Bash(curl -s http://127.0.0.1:15721)",
+      "Bash(curl -s http://127.0.0.1:15721/v1/models)",
+      "Bash(curl -s -X POST http://127.0.0.1:15721/v1/messages -H 'Content-Type: application/json' -H 'x-api-key: test' -H 'anthropic-version: 2023-06-01' -d '{\"model\":\"gpt-4o\",\"max_tokens\":50,\"messages\":[{\"role\":\"user\",\"content\":\"你是什么模型？\"}]}')"
     ]
   },
   "enabledPlugins": {}

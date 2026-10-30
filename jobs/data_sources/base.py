@@ -1,6 +1,7 @@
 # jobs/data_sources/base.py
 import asyncio
 import logging
+import time
 from typing import Any
 
 import httpx
@@ -10,12 +11,21 @@ from core.config import settings
 logger = logging.getLogger(__name__)
 
 BASE_URL = "https://datacenter.eastmoney.com/securities/api/data/v1/get"
-EM_TIMESTAMP = "1770038173236"
+
+
+def _em_timestamp() -> str:
+    return str(int(time.time() * 1000))
+
+
+_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "Referer": "https://data.eastmoney.com/",
+}
 
 
 class EastMoneyBase:
     def __init__(self):
-        self.client = httpx.AsyncClient(timeout=settings.em_timeout)
+        self.client = httpx.AsyncClient(timeout=settings.em_timeout, headers=_HEADERS)
 
     async def _fetch_page(
         self,
@@ -23,6 +33,9 @@ class EastMoneyBase:
         columns: str,
         filter_str: str,
         page_number: int = 1,
+        sort_columns: str = "",
+        sort_types: str = "",
+        extra: dict | None = None,
     ) -> dict:
         params = {
             "source": "SECURITIES",
@@ -32,8 +45,14 @@ class EastMoneyBase:
             "filter": filter_str,
             "pageNumber": str(page_number),
             "pageSize": str(settings.em_page_size),
-            "em_timestamp": EM_TIMESTAMP,
+            "em_timestamp": _em_timestamp(),
         }
+        if sort_columns:
+            params["sortColumns"] = sort_columns
+        if sort_types:
+            params["sortTypes"] = sort_types
+        if extra:
+            params.update(extra)
         for attempt in range(settings.em_max_retry + 1):
             try:
                 resp = await self.client.get(BASE_URL, params=params)
@@ -50,10 +69,13 @@ class EastMoneyBase:
         report_name: str,
         columns: str,
         filter_str: str,
+        sort_columns: str = "",
+        sort_types: str = "",
+        extra: dict | None = None,
         **kwargs: Any,
     ) -> list[dict]:
         try:
-            first = await self._fetch_page(report_name, columns, filter_str, page_number=1)
+            first = await self._fetch_page(report_name, columns, filter_str, page_number=1, sort_columns=sort_columns, sort_types=sort_types, extra=extra)
         except Exception as e:
             logger.error(f"Failed to fetch first page of {report_name}: {e}")
             return []
@@ -70,7 +92,7 @@ class EastMoneyBase:
         async def fetch_page_safe(page: int) -> list[dict]:
             async with semaphore:
                 try:
-                    resp = await self._fetch_page(report_name, columns, filter_str, page_number=page)
+                    resp = await self._fetch_page(report_name, columns, filter_str, page_number=page, sort_columns=sort_columns, sort_types=sort_types, extra=extra)
                     return (resp.get("result") or {}).get("data") or []
                 except Exception as e:
                     logger.error(f"Failed page {page} of {report_name}: {e}")
